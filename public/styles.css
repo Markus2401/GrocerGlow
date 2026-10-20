@@ -1,0 +1,166 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #24382c;
+    background: #f4f8f5;
+}
+
+header {
+    padding: 38px 20px;
+    color: white;
+    text-align: center;
+    background: #184d37;
+}
+header h1 { margin: 0; font-size: 36px; }
+header p { margin: 10px 0 0; color: #d0e9da; }
+
+main { max-width: 850px; margin: 35px auto; padding: 0 20px; }
+section {
+    margin-bottom: 24px;
+    padding: 25px;
+    border-radius: 14px;
+    background: white;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+h2, h3 { margin-top: 0; color: #184d37; }
+
+form { display: flex; flex-direction: column; gap: 12px; }
+label { display: block; margin-bottom: 7px; font-weight: bold; }
+input, select {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #cad8ce;
+    border-radius: 8px;
+    background: white;
+    color: #24382c;
+}
+input:focus, select:focus, button:focus-visible {
+    outline: 2px solid #40966c;
+    outline-offset: 2px;
+}
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+button {
+    border: none;
+    border-radius: 8px;
+    padding: 13px;
+    background: #218653;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+button:hover { background: #17683f; }
+button:disabled { opacity: 0.6; cursor: wait; }
+
+#shopping-list { list-style: none; padding: 0; }
+.shopping-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 10px;
+    padding: 14px;
+    border-radius: 8px;
+    background: #f4f8f5;
+}
+.item-info { display: flex; align-items: center; flex: 1; gap: 12px; min-width: 0; margin: 0; cursor: pointer; }
+.item-info input { width: 18px; height: 18px; flex-shrink: 0; accent-color: #218653; }
+.item-details { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.item-text { overflow-wrap: anywhere; }
+.item-price { font-size: 13px; color: #64796b; }
+.shopping-item.completed { background: #e5f2e9; }
+.shopping-item.completed .item-text { color: #82958a; text-decoration: line-through; }
+.delete-btn { flex-shrink: 0; padding: 8px 12px; font-size: 14px; color: #b42318; background: #fbe7e7; }
+.delete-btn:hover { background: #f5cccc; }
+#empty-list { color: #64796b; }
+
+#shopping-budget { margin-top: 9px; }
+#settings-save-status, #location-status { color: #547463; font-size: 14px; }
+.currency-settings { margin-top: 22px; padding: 18px; border-radius: 10px; background: #f4f8f5; }
+#currency-select { margin-bottom: 12px; }
+#current-currency { color: #184d37; font-weight: bold; }
+#detect-currency { width: 100%; }
+.small-note { color: #64796b; font-size: 12px; line-height: 1.5; }
+.small-note a { color: #17683f; }
+.budget-summary { margin-top: 22px; padding: 18px; border-radius: 10px; background: #e5f2e9; }
+.budget-summary p { margin: 8px 0; }
+#estimated-total { font-size: 22px; color: #184d37; }
+#budget-status { font-weight: bold; color: #17683f; }
+#missing-prices { font-size: 13px; color: #64796b; }
+
+@media (max-width: 600px) {
+    header { padding: 30px 15px; }
+    header h1 { font-size: 28px; }
+    main { margin: 20px auto; padding: 0 12px; }
+    section { padding: 18px; }
+    .input-row { grid-template-columns: 1fr; }
+    .shopping-item { gap: 8px; }
+}
+
+/* Currency controls also work with the original Lesson 13 HTML file. */
+.currency-settings {
+    margin-top: 24px;
+    padding: 18px;
+    border-radius: 10px;
+    background: #f4f8f5;
+}
+.currency-settings label {
+    display: block;
+    margin: 14px 0 6px;
+}
+.currency-settings select {
+    display: block;
+    width: 100%;
+    margin-bottom: 14px;
+}
+#current-currency {
+    font-size: 15px;
+    font-weight: 700;
+    color: #184d37;
+}
+#location-status {
+    min-height: 20px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+#detect-currency { display: block; width: 100%; }
+.currency-disclaimer { margin-top: 12px; }
+#settings-save-status { min-height: 20px; }
+#empty-list[hidden] { display: none; }
+
+/* One compact location/attribution note (no duplicate disclaimers). */
+.currency-privacy-note {
+    margin: 10px 0 0;
+    color: #64796b;
+    font-size: 12px;
+    line-height: 1.4;
+}
+.currency-privacy-note a { color: #17683f; }
+
+
+/* LESSON 14: Edit item panel; no changes to your existing HTML required. */
+.item-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.edit-btn { padding: 8px 12px; font-size: 14px; color: #17683f; background: #dbefe2; }
+.edit-btn:hover { background: #c4e5d0; }
+.shopping-item.editing { flex-wrap: wrap; align-items: flex-start; }
+.shopping-item.editing .item-actions { margin-left: auto; }
+.edit-form { width: 100%; flex-basis: 100%; border-top: 1px solid #d1e1d5; padding-top: 14px; }
+.edit-fields { display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 12px; }
+.edit-fields label { font-size: 13px; margin-bottom: 6px; }
+.edit-fields input { min-width: 0; }
+.edit-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.save-edit-btn, .cancel-edit-btn { font-size: 14px; padding: 10px 14px; }
+.cancel-edit-btn { background: #e0e9e3; color: #24382c; }
+.cancel-edit-btn:hover { background: #cbded0; }
+.edit-error { color: #a72323; font-size: 13px; margin: 0; }
+.edit-error:empty { display: none; }
+@media (max-width: 600px) {
+    .shopping-item { flex-wrap: wrap; }
+    .item-actions { margin-left: auto; }
+    .edit-fields { grid-template-columns: 1fr; }
+    .edit-form { margin-top: 4px; }
+}

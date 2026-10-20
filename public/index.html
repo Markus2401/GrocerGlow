@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GrocerGlow</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+</head>
+<body>
+
+    <header>
+        <h1>GrocerGlow</h1>
+        <p>Plan your basket. Know your budget.</p>
+    </header>
+
+    <main>
+        <section>
+            <h2>My Shopping List</h2>
+
+            
+<form id="item-form">
+
+    <label for="item-name">Item name</label>
+    <input
+        type="text"
+        id="item-name"
+        placeholder="e.g. Avocados"
+        required
+    >
+
+    <label for="item-quantity">Quantity</label>
+    <input
+        type="number"
+        id="item-quantity"
+        min="1"
+        step="1"
+        value="1"
+        required
+    >
+
+    <label for="item-price">Estimated price per item</label>
+    <input
+        type="number"
+        id="item-price"
+        min="0"
+        step="0.01"
+        placeholder="Optional"
+    >
+
+    <button type="submit">Add Item</button>
+
+</form>
+
+        </section>
+
+<section class="budget-section">
+    <h2>Shopping Budget</h2>
+
+    <label for="shopping-budget">Set your budget</label>
+
+    <input
+        type="number"
+        id="shopping-budget"
+        min="0"
+        step="0.01"
+        placeholder="e.g. 1000.00"
+    >
+    <p id="settings-save-status" role="status"></p>
+
+    
+<div class="currency-settings">
+    <h3>Shopping Currency</h3>
+
+    <button type="button" id="detect-currency">
+        Detect My Currency
+    </button>
+
+    <p id="location-status" role="status">
+        Detect your country to suggest a currency.
+    </p>
+
+    <p id="current-currency">
+        Current currency: Not loaded
+    </p>
+
+    <p class="location-credit">
+        Location detection shares approximate coordinates
+        with OpenStreetMap Nominatim.
+        <a href="https://www.openstreetmap.org/copyright"
+           target="_blank" rel="noopener noreferrer">
+            © OpenStreetMap contributors
+        </a>
+    </p>
+</div>
+
+    <div class="budget-summary">
+        <p>
+            Estimated total:
+            <strong id="estimated-total">0.00</strong>
+        </p>
+
+        <p id="budget-status">
+            Enter a budget to see how much remains.
+        </p>
+
+        <p id="missing-prices">
+            All items have estimated prices.
+        </p>
+    </div>
+</section>
+
+        <section>
+            <h2>Shopping Items</h2>
+            <ul id="shopping-list"></ul>
+        </section>
+    </main>
+
+</body>
+</html>
