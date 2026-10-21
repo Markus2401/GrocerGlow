@@ -7,7 +7,7 @@ Audit date: **21 October 2026**. Environment: Windows 11 x64 (build 26200), Node
 - Actual project: `npm test` exited 0 but ran **0 tests**. Both browser commands failed with missing files. This is a failed baseline, not a passing test suite.
 - Recovered original suites in an isolated copy, with the current source unchanged: clean `npm ci` passed, **24 backend tests passed**, shopping browser suite **8 groups passed**, list suite **5 groups passed**.
 - Targeted browser/HTTP probe reproduced: oversized body returned 500; `0.1 + 0.2` against `0.3` showed “Over budget by R0.00”; checkbox focus fell to body; failed budget save left the unsaved number visible.
-- Fresh authenticated GitHub clone of `9c7eea8bc86309a2758ec93cbd451a742881993e`: `npm ci` failed because bundled node-gyp 11.5.0 did not recognize Visual Studio 2026; `npm test` was a failing placeholder, and start/browser/list scripts were absent. This published version is not the tested local candidate.
+- Fresh authenticated GitHub clone of `9c7eea8bc86309a2758ec93cbd451a742881993e`: `npm ci` failed because bundled node-gyp 11.5.0 did not recognize Visual Studio 2026; `npm test` was a failing placeholder, and browser/list scripts were absent. `npm start` used npm's server.js fallback but failed to load SQLite after the failed installation. This published version is not the tested local candidate.
 
 ## Executable cases
 
@@ -65,3 +65,7 @@ Synthetic data only. Long names are deliberate stress cases.
 - [Dark desktop](evidence/dark-1440.png), [dark 320px](evidence/dark-320.png), [mobile settings](evidence/settings-mobile.png), [Shopping Mode](evidence/shopping-mode.png)
 
 Screenshots and axe scans do not prove physical-phone keyboard/zoom or screen-reader usability. Real GPS was not requested. The assignment PDF/PPTX/video/submission were not supplied and are not certified by automated tests.
+
+## Final reproduction results
+
+The actual project, a fresh clone of the reviewed local commits, and a freshly extracted 42-file source ZIP passed clean installation, syntax/format checks and all 32 backend tests. All three browser suites passed with Edge; the reviewed local clone also passed all three with Chrome 155.0.8059.85. Actual `npm start` in the clean installations initialized an empty database, served the homepage, accepted item/list creation and preserved those records across a process restart. Dependency audit reported zero known vulnerabilities. The GitHub clone remains the older private initial commit and fails installation/testing; remote CI and public availability remain pending. See the separately supplied final audit report for exact commits and artifact checksum.

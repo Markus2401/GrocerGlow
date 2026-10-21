@@ -123,8 +123,8 @@ nav {
     font-size: 11px;
     font-weight: 750;
     color: var(--green);
-    padding-right: 9px;
-    border-right: 1px solid var(--line);
+    padding: 0 8px 0 0;
+    border: 0;
 }
 main {
     max-width: 1216px;
@@ -775,10 +775,6 @@ dialog::backdrop {
         padding-top: 10px;
     }
 
-    #header-currency {
-        font-size: 10px;
-        padding-right: 7px;
-    }
     main {
         padding: 0 16px;
     }
@@ -909,11 +905,6 @@ dialog::backdrop {
 }
 .nav-actions {
     gap: 10px;
-}
-#header-currency.nav-currency {
-    padding: 0 8px 0 0;
-    border: 0;
-    font-size: 11px;
 }
 .icon-button {
     width: 44px;
@@ -1116,7 +1107,7 @@ html[data-theme="dark"] {
         justify-content: flex-end;
         gap: 8px;
     }
-    #header-currency.nav-currency {
+    #header-currency {
         margin-right: auto;
     }
     .shopping-mode-button {
