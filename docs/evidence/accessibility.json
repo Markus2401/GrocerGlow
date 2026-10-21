@@ -1,0 +1,54 @@
+[
+  {
+    "label": "shopping mode keyboard",
+    "violations": []
+  },
+  {
+    "label": "settings dialog light",
+    "violations": []
+  },
+  {
+    "label": "new list dialog",
+    "violations": []
+  },
+  {
+    "label": "light 320",
+    "violations": []
+  },
+  {
+    "label": "light 390",
+    "violations": []
+  },
+  {
+    "label": "light 600",
+    "violations": []
+  },
+  {
+    "label": "light 768",
+    "violations": []
+  },
+  {
+    "label": "light 1024",
+    "violations": []
+  },
+  {
+    "label": "light 1440",
+    "violations": []
+  },
+  {
+    "label": "edit form",
+    "violations": []
+  },
+  {
+    "label": "dark desktop",
+    "violations": []
+  },
+  {
+    "label": "dark mobile",
+    "violations": []
+  },
+  {
+    "label": "dark mobile settings",
+    "violations": []
+  }
+]
