@@ -1,0 +1,7 @@
+node_modules/
+*.log
+*.db
+backups/
+package-lock.json
+GROCERGLOW_CODEX*.md
+docs/evidence/

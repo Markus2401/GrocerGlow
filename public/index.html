@@ -1,121 +1,425 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GrocerGlow</title>
-    <link rel="stylesheet" href="/styles.css">
-    <script src="/app.js" defer></script>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="theme-color" content="#175c3d" />
+        <title>Your shopping list · GrocerGlow</title>
+        <script src="/theme-init.js"></script>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="stylesheet" href="/styles.css" />
+        <script src="/money.js" defer></script>
+        <script src="/app.js" defer></script>
+    </head>
+    <body>
+        <a class="skip-link" href="#main-content">Skip to shopping list</a>
+        <header class="app-header">
+            <a class="brand" href="#main-content" aria-label="GrocerGlow home">
+                <span class="brand-mark" aria-hidden="true">g.</span>
+                <span
+                    >GrocerGlow<span class="brand-tagline"
+                        >Plan your basket. Know your budget.</span
+                    ></span
+                >
+            </a>
+            <nav aria-label="Page sections">
+                <div class="nav-links">
+                    <a href="#lists-panel" data-planning-link>My Lists</a
+                    ><a href="#budget-panel" data-planning-link>Budget</a>
+                </div>
+                <div class="nav-actions">
+                    <span id="header-currency" class="nav-currency" aria-label="Current currency"
+                        >ZAR</span
+                    >
+                    <button
+                        type="button"
+                        class="icon-button"
+                        id="theme-toggle"
+                        aria-label="Toggle dark mode"
+                        aria-pressed="false"
+                        title="Switch to dark mode"
+                    >
+                        <span id="theme-icon" aria-hidden="true">☾</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="icon-button"
+                        data-open-settings
+                        aria-label="Settings"
+                        title="Location and currency settings"
+                    >
+                        <span aria-hidden="true">⚙</span>
+                    </button>
+                    <button
+                        type="button"
+                        class="primary-button shopping-mode-button"
+                        id="shopping-mode-toggle"
+                        aria-pressed="false"
+                    >
+                        Shopping Mode
+                    </button>
+                </div>
+            </nav>
+        </header>
 
-    <header>
-        <h1>GrocerGlow</h1>
-        <p>Plan your basket. Know your budget.</p>
-    </header>
+        <main id="main-content" tabindex="-1">
+            <section id="lists-panel" class="lists-toolbar" aria-label="Manage shopping lists">
+                <div class="list-picker">
+                    <label for="list-select">My lists</label
+                    ><select id="list-select" disabled>
+                        <option>Loading lists…</option>
+                    </select>
+                </div>
+                <button type="button" id="new-list-button" class="secondary-button" disabled>
+                    New list <span aria-hidden="true">+</span>
+                </button>
+                <div class="list-management">
+                    <button type="button" id="rename-list-button" class="text-button" disabled>
+                        Rename</button
+                    ><button type="button" id="shop-again-button" class="secondary-button" disabled>
+                        Shop Again</button
+                    ><button
+                        type="button"
+                        id="delete-list-button"
+                        class="text-button danger-text"
+                        disabled
+                    >
+                        Delete list
+                    </button>
+                </div>
+                <p id="lists-status" class="status-message" role="status" aria-live="polite"></p>
+            </section>
+            <div class="page-heading">
+                <div>
+                    <p class="eyebrow">
+                        Current list · <span id="current-list-name">Shopping list</span>
+                    </p>
+                    <h1 id="page-title">Your shopping list</h1>
+                    <p id="page-description">
+                        Add what you need, check your budget, and you're ready to shop.
+                    </p>
+                </div>
+                <a class="heading-link" href="#price-panel"
+                    >Need help finding prices? <span aria-hidden="true">↗</span></a
+                >
+            </div>
+            <div class="workspace">
+                <div class="list-column" id="list-panel">
+                    <section class="add-panel" aria-labelledby="add-heading">
+                        <div class="section-heading">
+                            <h2 id="add-heading">Add an item</h2>
+                            <span class="optional-note">A price is optional</span>
+                        </div>
+                        <form id="item-form">
+                            <div class="name-field">
+                                <label for="item-name">Item name</label
+                                ><input
+                                    type="text"
+                                    id="item-name"
+                                    name="item-name"
+                                    autocomplete="off"
+                                    placeholder="e.g. Milk or avocados"
+                                    maxlength="120"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label for="item-quantity">Quantity</label
+                                ><input
+                                    type="number"
+                                    id="item-quantity"
+                                    name="item-quantity"
+                                    autocomplete="off"
+                                    min="1"
+                                    max="1000000"
+                                    step="1"
+                                    value="1"
+                                    required
+                                />
+                            </div>
+                            <div>
+                                <label for="item-price"
+                                    >Unit price <span id="price-currency">(ZAR)</span></label
+                                ><input
+                                    type="number"
+                                    id="item-price"
+                                    name="item-price"
+                                    autocomplete="off"
+                                    min="0"
+                                    max="1000000000"
+                                    step="0.001"
+                                    placeholder="Not set"
+                                />
+                            </div>
+                            <button type="submit" class="primary-button">
+                                Add Item <span aria-hidden="true">+</span>
+                            </button>
+                        </form>
+                        <p
+                            id="list-status"
+                            class="status-message"
+                            role="status"
+                            aria-live="polite"
+                        ></p>
+                    </section>
+                    <section class="list-panel" aria-labelledby="items-heading">
+                        <div class="section-heading">
+                            <h2 id="items-heading">Your items</h2>
+                            <span id="item-count" class="item-count">0 items</span>
+                        </div>
+                        <p class="section-description">
+                            Tick items as you shop. Use Edit to change an item or its price.
+                        </p>
+                        <p id="shopping-progress" role="status" aria-live="polite" hidden></p>
+                        <ul id="shopping-list" aria-label="Shopping items"></ul>
+                        <div id="empty-list" class="empty-state" hidden>
+                            <span class="empty-mark" aria-hidden="true">+</span>
+                            <h3>Start with your first item</h3>
+                            <p>
+                                Milk, bread, something for dinner…<br />Add an item above to get
+                                your list going.
+                            </p>
+                            <button type="button" class="text-button" id="empty-add">
+                                Add your first item <span aria-hidden="true">↑</span>
+                            </button>
+                        </div>
+                        <p class="list-footnote">Changes are saved automatically.</p>
+                    </section>
+                </div>
 
-    <main>
-        <section>
-            <h2>My Shopping List</h2>
+                <aside class="planning-column" aria-label="Plan your shopping">
+                    <section
+                        id="budget-panel"
+                        class="budget-panel"
+                        aria-labelledby="budget-heading"
+                    >
+                        <div class="section-heading">
+                            <h2 id="budget-heading">Shopping budget</h2>
+                            <span class="currency-tag" id="budget-currency">ZAR</span>
+                        </div>
+                        <p class="section-description">Keep an eye on what you plan to spend.</p>
+                        <div class="total-block">
+                            <span>Estimated total</span><strong id="estimated-total">0.00</strong>
+                        </div>
+                        <label for="shopping-budget"
+                            >Your budget <span class="optional-note">(optional)</span></label
+                        >
+                        <input
+                            type="number"
+                            id="shopping-budget"
+                            name="shopping-budget"
+                            autocomplete="off"
+                            min="0"
+                            max="1000000000"
+                            step="0.001"
+                            placeholder="Set an amount"
+                        />
+                        <p class="field-help">
+                            Saves when you leave this field. Estimates allow up to 3 decimal places.
+                        </p>
+                        <p
+                            id="settings-save-status"
+                            class="status-message"
+                            role="status"
+                            aria-live="polite"
+                        ></p>
+                        <progress
+                            id="budget-progress"
+                            max="100"
+                            value="0"
+                            aria-label="Estimated spending as a percentage of budget"
+                            hidden
+                        ></progress>
+                        <p id="budget-percentage" class="budget-percentage" hidden></p>
+                        <p id="budget-status">Enter a budget to see how much remains.</p>
+                        <p id="missing-prices" class="price-note">
+                            All items have estimated prices.
+                        </p>
+                    </section>
+                    <section
+                        id="price-panel"
+                        class="price-panel currency-settings"
+                        aria-labelledby="price-search-heading"
+                    >
+                        <p class="eyebrow">Compare before you buy</p>
+                        <h2 id="price-search-heading">Find local prices</h2>
+                        <p class="section-description">
+                            Set your area, then choose <strong>Find Local Prices</strong> beside an
+                            item.
+                        </p>
+                        <label for="shopping-area">Town or city for price searches</label>
+                        <input
+                            type="text"
+                            id="shopping-area"
+                            name="shopping-area"
+                            autocomplete="off"
+                            maxlength="160"
+                            placeholder="e.g. Cape Town, South Africa"
+                            aria-describedby="price-search-help"
+                        />
+                        <button type="button" id="detect-currency" class="secondary-button">
+                            Detect My Location &amp; Currency
+                        </button>
+                        <p
+                            id="location-status"
+                            class="status-message"
+                            role="status"
+                            aria-live="polite"
+                        ></p>
+                        <p
+                            id="price-search-status"
+                            class="status-message"
+                            role="status"
+                            aria-live="polite"
+                        ></p>
+                        <p id="price-search-help" class="small-note">
+                            Search opens Google in a new tab. Come back and use Edit to save a
+                            unit-price estimate.
+                        </p>
+                        <p class="small-note">
+                            Location data:
+                            <a
+                                href="https://www.openstreetmap.org/copyright"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >© OpenStreetMap contributors</a
+                            >.
+                            <a
+                                href="https://operations.osmfoundation.org/policies/nominatim/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                >Usage policy</a
+                            >
+                        </p>
+                        <details class="help-details">
+                            <summary>About prices &amp; location</summary>
+                            <p>
+                                Search results may be outdated. Prices are entered by you, not
+                                imported automatically.
+                            </p>
+                            <p id="currency-note">
+                                Detection shares approximate coordinates with OpenStreetMap.
+                                <a
+                                    href="https://www.openstreetmap.org/copyright"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    >© OpenStreetMap contributors</a
+                                >
+                            </p>
+                        </details>
+                    </section>
+                </aside>
+            </div>
+            <footer class="app-footer">
+                <span>GrocerGlow</span><span>A clearer list. A calmer shop.</span>
+            </footer>
+        </main>
 
-            
-<form id="item-form">
-
-    <label for="item-name">Item name</label>
-    <input
-        type="text"
-        id="item-name"
-        placeholder="e.g. Avocados"
-        required
-    >
-
-    <label for="item-quantity">Quantity</label>
-    <input
-        type="number"
-        id="item-quantity"
-        min="1"
-        step="1"
-        value="1"
-        required
-    >
-
-    <label for="item-price">Estimated price per item</label>
-    <input
-        type="number"
-        id="item-price"
-        min="0"
-        step="0.01"
-        placeholder="Optional"
-    >
-
-    <button type="submit">Add Item</button>
-
-</form>
-
-        </section>
-
-<section class="budget-section">
-    <h2>Shopping Budget</h2>
-
-    <label for="shopping-budget">Set your budget</label>
-
-    <input
-        type="number"
-        id="shopping-budget"
-        min="0"
-        step="0.01"
-        placeholder="e.g. 1000.00"
-    >
-    <p id="settings-save-status" role="status"></p>
-
-    
-<div class="currency-settings">
-    <h3>Shopping Currency</h3>
-
-    <button type="button" id="detect-currency">
-        Detect My Currency
-    </button>
-
-    <p id="location-status" role="status">
-        Detect your country to suggest a currency.
-    </p>
-
-    <p id="current-currency">
-        Current currency: Not loaded
-    </p>
-
-    <p class="location-credit">
-        Location detection shares approximate coordinates
-        with OpenStreetMap Nominatim.
-        <a href="https://www.openstreetmap.org/copyright"
-           target="_blank" rel="noopener noreferrer">
-            © OpenStreetMap contributors
-        </a>
-    </p>
-</div>
-
-    <div class="budget-summary">
-        <p>
-            Estimated total:
-            <strong id="estimated-total">0.00</strong>
-        </p>
-
-        <p id="budget-status">
-            Enter a budget to see how much remains.
-        </p>
-
-        <p id="missing-prices">
-            All items have estimated prices.
-        </p>
-    </div>
-</section>
-
-        <section>
-            <h2>Shopping Items</h2>
-            <ul id="shopping-list"></ul>
-        </section>
-    </main>
-
-</body>
+        <dialog
+            id="currency-dialog"
+            aria-labelledby="currency-dialog-heading"
+            aria-describedby="currency-dialog-description"
+        >
+            <div class="dialog-heading">
+                <h2 id="currency-dialog-heading">Settings</h2>
+                <button
+                    type="button"
+                    class="close-button"
+                    id="close-settings"
+                    aria-label="Close settings"
+                >
+                    ×
+                </button>
+            </div>
+            <p id="currency-dialog-description">Manage your shopping area and currency.</p>
+            <div class="settings-location">
+                <h3>Shopping area</h3>
+                <label for="settings-shopping-area">Town or city</label>
+                <input
+                    type="text"
+                    id="settings-shopping-area"
+                    name="settings-shopping-area"
+                    autocomplete="off"
+                    maxlength="160"
+                    placeholder="e.g. Cape Town, South Africa"
+                />
+                <button type="button" id="settings-detect-location" class="secondary-button">
+                    Detect my location
+                </button>
+                <p class="small-note">
+                    This updates the town used for local price searches. Detection shares
+                    approximate coordinates with OpenStreetMap.
+                </p>
+                <p
+                    id="settings-location-status"
+                    class="status-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+            </div>
+            <h3>Currency</h3>
+            <label for="currency-select">Choose a currency</label>
+            <select id="currency-select"></select>
+            <p id="current-currency">Current currency: Loading…</p>
+            <p
+                id="currency-save-status"
+                class="status-message"
+                role="status"
+                aria-live="polite"
+            ></p>
+            <p class="settings-note">
+                Changing currency doesn't convert amounts. If prices or a budget are saved, we'll
+                ask before clearing those amounts.
+            </p>
+            <button type="button" class="primary-button" id="done-settings">Done</button>
+        </dialog>
+        <dialog
+            id="list-dialog"
+            aria-labelledby="list-dialog-heading"
+            aria-describedby="list-dialog-description"
+        >
+            <form id="list-management-form">
+                <div class="dialog-heading">
+                    <h2 id="list-dialog-heading">New list</h2>
+                    <button
+                        type="button"
+                        class="close-button"
+                        data-close-list-dialog
+                        aria-label="Close list dialog"
+                    >
+                        ×
+                    </button>
+                </div>
+                <p id="list-dialog-description" class="settings-note"></p>
+                <label for="list-name">List name</label
+                ><input
+                    type="text"
+                    id="list-name"
+                    name="list-name"
+                    autocomplete="off"
+                    maxlength="80"
+                    required
+                />
+                <label id="copy-prices-option" class="checkbox-option" hidden
+                    ><input
+                        type="checkbox"
+                        id="copy-prices"
+                        name="copy-prices"
+                        autocomplete="off"
+                    />Copy previous estimated prices</label
+                >
+                <p id="copy-prices-note" class="small-note" hidden>
+                    Old prices may be outdated. Leave this unchecked to research fresh prices.
+                </p>
+                <p id="list-dialog-status" class="status-message" role="alert"></p>
+                <div class="dialog-actions">
+                    <button type="button" class="secondary-button" data-close-list-dialog>
+                        Cancel</button
+                    ><button type="submit" id="save-list-button" class="primary-button">
+                        Create list
+                    </button>
+                </div>
+            </form>
+        </dialog>
+    </body>
 </html>
