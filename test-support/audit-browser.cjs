@@ -8,7 +8,7 @@ const { startServer } = require("./fixture.cjs");
 (async () => {
     const fixture = await startServer();
     let browser;
-    const evidence = path.join(__dirname, "../docs/evidence");
+    const evidence = path.join(__dirname, "../test-results");
     mkdirSync(evidence, { recursive: true });
     const scans = [];
     try {

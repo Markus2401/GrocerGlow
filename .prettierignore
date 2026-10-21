@@ -3,5 +3,5 @@ node_modules/
 *.db
 backups/
 package-lock.json
-GROCERGLOW_CODEX*.md
 docs/evidence/
+test-results/

@@ -5,7 +5,18 @@ const root = join(__dirname, "..");
 let count = 0;
 function check(directory) {
     for (const entry of readdirSync(directory, { withFileTypes: true })) {
-        if (["node_modules", ".git", "backups", "docs"].includes(entry.name)) continue;
+        if (
+            [
+                "node_modules",
+                ".git",
+                "backups",
+                "docs",
+                "test-results",
+                "playwright-report",
+                "coverage",
+            ].includes(entry.name)
+        )
+            continue;
         const filename = join(directory, entry.name);
         if (entry.isDirectory()) check(filename);
         else if (/\.(c?js)$/.test(entry.name)) {
