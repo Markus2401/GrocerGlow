@@ -1,16 +1,14 @@
-# Test plan and verified results
+# Testing
 
-Reviewed **21 October 2026**. Local environment: Windows 11 x64, Node **22.22.3**, npm **10.9.8**, Edge **155.0.4283.62**. Tests create independent SQLite files, use synthetic locations and intercept external search navigation. No suite uses the student's database or requests real GPS.
+## Methodology and results
 
-## Published application evidence
+The tests exercise real HTTP requests and SQLite persistence, browser workflows, failure handling and responsive layout. Each suite creates temporary databases and synthetic records. Geocoding uses controlled fixtures and price-search navigation is intercepted; automated tests do not use personal shopping data or real GPS.
 
-GitHub `main` commit **8736aec62c073e7f12e353cf1174b049085b8bd6** was cloned from the actual private repository into a new directory. Clean `npm ci`, syntax/format checks, **32 backend tests**, **three browser suites**, dependency audit, normal startup and restart persistence passed. The [main Actions run 39568677971](https://github.com/Markus2401/GrocerGlow/actions/runs/39568677971) passed on Windows/Node 22.22.3, including installation, all suites and the audit. These are results for the published application, not an unpublished cleanup commit.
+Verified **22 October 2026** on Windows 11 x64, Node **22.22.3**, npm **10.9.8** and Edge **155.0.4283.62**: syntax and formatting checks, **32 backend tests** (including parent tests), all three browser suites and the dependency audit passed. The browser scripts report **8 shopping**, **5 list** and **7 additional groups**. A clean GitHub clone installed with `npm ci`, passed the same checks and started normally; separate test records survived a server restart. No known dependency vulnerabilities were reported at verification time.
 
-## Cleanup validation
+[GitHub Actions](https://github.com/Markus2401/GrocerGlow/actions/workflows/check.yml) repeats installation, checks, all suites and the dependency audit on Windows/Node 22. Check the run's revision and conclusion when evaluating a later change; local success alone does not establish CI success.
 
-Before and after cleanup, syntax, formatting, all 32 backend tests and all three browser suites passed. Dependency audit reported zero known vulnerabilities. A freshly exported 37-file cleaned source installed with `npm ci` and passed those same checks, all suites and the audit. Actual `npm start` served the homepage, accepted item/list creation and preserved both across restart in its separate test database. The personal SQLite file retained its exact SHA-256 hash, passed a read-only integrity check and had no foreign-key violations. All application features, scenarios and dependencies are retained. Generated browser output is separated from selected assessment images. A new remote run can only be verified after approved publication; the accompanying cleanup report records exact commands and source identity.
-
-## Executable cases
+## Test cases
 
 | ID  | Scenario and steps/data                                                              | Expected                                                                | Actual / status                                                            | Evidence                                      |
 | --- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- | -------------------------------------------------------------------------- | --------------------------------------------- |
@@ -41,9 +39,9 @@ Before and after cleanup, syntax, formatting, all 32 backend tests and all three
 | T25 | Legacy populated/empty database with sequence99; backup blocked                      | Verified snapshot, rows/IDs/settings preserved; safe abort; idempotence | PASS                                                                       | migration suite                               |
 | T26 | Normal server start/restart on tempDB; occupied port; invalid DB path                | Loopback response, persistence, clear startup failure                   | PASS                                                                       | hardening                                     |
 | T27 | Syntax, formatting, npm dependency audit                                             | Checks pass; lockfile clean install                                     | PASS; clean installation checked separately                                | check + format + npm audit                    |
-| T28 | Real GPS, physical phone and screen reader                                           | Actual device/provider evidence                                         | PENDING student action                                                     | `IU_READINESS.md`                             |
+| T28 | Real GPS, physical phone and screen reader                                           | Actual device/provider evidence                                         | PENDING manual check                                                       | Manual checks below                           |
 
-## Reproduce the checks
+## Run the checks
 
 ```powershell
 npm ci
@@ -56,41 +54,46 @@ npm run test:audit
 npm audit
 ```
 
-The backend reports **32 tests**, counting parent tests. Browser suites report **8 shopping**, **5 list** and **7 audit groups**. Missing suite files cause failure. Playwright uses installed Edge; select Chrome with `$env:GROCERGLOW_BROWSER = 'chrome'`.
+Playwright uses installed Edge. Select Chrome with `$env:GROCERGLOW_BROWSER = 'chrome'`. Missing suite files cause failure. Tests manage their own temporary servers and database cleanup.
 
-| Suite                            | Distinct coverage                                                                                        |
+| Suite                            | Coverage                                                                                                 |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------- |
 | `test/integration.test.cjs`      | Real HTTP CRUD, partial PATCH, currencies, list isolation, copy/delete and persistence                   |
-| `test/migration.test.cjs`        | Legacy populated/empty data, backups, ID sequences, idempotence and safe backup failure                  |
-| `test/location.test.cjs`         | Provider failures, cache, timeout contract, throttling, concurrency and HTTPS configuration              |
-| `test/hardening.test.cjs`        | Invalid/large JSON, media type, bounds, IDs, headers, money precision and real entry-point failures      |
-| `test-support/browser.cjs`       | Shopping, safe research links, manual/detected area, settings, mode and themes                           |
+| `test/migration.test.cjs`        | Legacy populated/empty data, snapshots, ID sequences, idempotence and safe backup failure                |
+| `test/location.test.cjs`         | Provider failures, caching, timeout contract, throttling, concurrency and HTTPS configuration            |
+| `test/hardening.test.cjs`        | Invalid/large JSON, media types, bounds, IDs, headers, money precision and real entry-point failures     |
+| `test-support/browser.cjs`       | Shopping, encoded research links, manual/detected area, settings, Shopping Mode and themes               |
 | `test-support/lists-browser.cjs` | List management, optional prices, isolation, delayed/failed requests and responsive controls             |
 | `test-support/audit-browser.cjs` | Edit/reload, keyboard focus/dialogs, asynchronous errors, precision, storage fallback, long text and axe |
 
-The suites remain because their failure modes differ. Axe scans cover 13 states using WCAG 2 A/AA and 2.1 AA tags, with no detected violations in verified runs. This does not certify complete accessibility.
+The suites cover different failure modes. In particular, partial edits preserve omitted purchased flags, currency changes isolate resets to the selected list, and migration tests verify existing records and safe failure when a snapshot cannot be written.
 
-## Generated output and selected evidence
+## Responsive and accessibility evidence
 
-`npm run test:audit` writes its full screenshot set and `accessibility.json` to ignored **`test-results/`**, preventing tests from rewriting assessment evidence. All six widths remain tested: **320, 390, 600, 768, 1024 and 1440px**. Other suites also exercise 375/1280px. Inspect newly generated output when reproducing results.
+The browser tests check long names, both themes and widths of **320, 390, 600, 768, 1024 and 1440px**; other suites also use 375/1280px. Keyboard tests cover checkbox focus, dialog Tab boundaries, Escape and opener focus. Axe scans cover **13 states** using WCAG 2 A/AA and 2.1 AA tags, with no detected violations in the verified runs. These results do not certify complete accessibility.
 
-Six retained screenshots show distinct assessment states with synthetic data; long names deliberately stress wrapping:
+`npm run test:audit` writes generated screenshots and `accessibility.json` to ignored `test-results/`. Six representative screenshots with synthetic data are retained here:
 
-- [Light desktop](evidence/light-1440.png) and [light 320px](evidence/light-320.png)
-- [Dark desktop](evidence/dark-1440.png) and [dark 320px](evidence/dark-320.png)
-- [Mobile settings](evidence/settings-mobile.png) and [Shopping Mode](evidence/shopping-mode.png)
+- [Light desktop](evidence/light-1440.png) and [light 320px](evidence/light-320.png).
+- [Dark desktop](evidence/dark-1440.png) and [dark 320px](evidence/dark-320.png).
+- [Mobile settings](evidence/settings-mobile.png) and [Shopping Mode](evidence/shopping-mode.png).
 
-Intermediate-width images and machine-generated accessibility JSON remain reproducible output rather than duplicate source evidence. No viewport assertions or scans were removed.
+Each retained image shows a distinct layout or state. Inspect freshly generated output when reproducing the tests.
 
-## Clean installation and data-safety procedure
+## Fresh-install and persistence check
 
-1. Clone the intended published revision, or export the reviewed source with `scripts/export.ps1` and extract into a new empty directory.
-2. Verify Node 22 and run `npm ci` without transferring dependencies.
-3. Run every check above; record exit codes and suite counts.
-4. Run `npm start` with a separate test database and loopback port. Verify homepage, item/list creation and persistence across a restart.
-5. Inspect the export: no Git directory, dependencies, databases/backups, credentials or generated results. Compare source files with the tested revision.
-6. Verify actual Actions conclusion and commit SHA after publication; local success does not prove remote CI.
+1. Clone the repository into a new empty directory and run `npm ci` with Node 22; do not transfer `node_modules`.
+2. Run every check above and inspect the exit codes and suite counts.
+3. Set `GROCERGLOW_DB_PATH` to a new demonstration database and start with `npm start` on loopback. Verify the homepage, create an item and another list, stop the server, restart with the same demonstration database and verify both persisted.
+4. Check the intended revision's Actions run. A source export should contain no databases, backups, credentials, installed dependencies or generated results.
 
-## Remaining manual verification
+Tests and demonstration runs must use separate databases. Existing personal data must not be deleted or reset. Database preservation can be checked with before/after file hashes and read-only SQLite integrity/foreign-key checks without exposing records.
 
-Real GPS/OS permission flow, physical-phone touch/keyboard/zoom and screen-reader navigation remain pending. Browser permission-timeout duration was not independently timed. Provider failures are simulated rather than tested against the public geocoder. The original assignment PDF, presentation, video and submission are not certified by these tests. See IU_READINESS for student actions.
+## Manual checks still needed
+
+- Real GPS and OS/browser permissions: verify town/country, denial, manual override and currency confirmation on an actual device. Provider fixtures do not establish live service accuracy.
+- Physical phone: verify touch targets, navigation, dialogs, on-screen keyboard, orientation and zoom.
+- Screen reader: verify labels, status/error announcements, dialog flow and purchase checkmarks.
+- Browser permission-timeout duration has not been independently timed. macOS/Linux installation has not been independently verified.
+
+For each manual check, record the device/browser, steps, expected and actual result, and any issue found. Keep private shopping data and precise coordinates out of evidence. Software tests do not establish completion of presentation, video, tutor-feedback or university submission requirements.
